@@ -136,7 +136,7 @@ def main(argv):
 			os.rename("./"+entry, "./"+manga+chapter+"/"+entry)
 
 	
-	call(["tar", "-cvzf", manga+chapter+".tar.gz", manga+chapter])
+	call(["tar", "-czf", manga+chapter+".tar.gz", manga+chapter])
 
 
 

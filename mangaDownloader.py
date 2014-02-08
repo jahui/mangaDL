@@ -67,17 +67,16 @@ def mangaChapter(start_url):
 
 	#mangahere note first page of every chapter is page/ with the nth page being page/n.html
 	#mangapanda note first page of every chapter is page/ with the nth page being page/n
-	if "mangahere" in start_url:
-		url_end = ".html"
-	elif "mangapanda" in start_url:
-		url_end = ""
-	else:
-		sys.exit()
+	#if "mangahere" in start_url:
+		#url_end = ".html"
+	#elif "mangapanda" in start_url:
+		#url_end = ""
+	#else:
+		#sys.exit()
 
 
 	
 	curr_image = imageGrab(start_url, "01")
-	last_image = ''
 
 	if curr_image == "":
 		count = 0
@@ -87,14 +86,14 @@ def mangaChapter(start_url):
 	#always loop
 	while True:
 
-		#set last image value as the current one
+		#set the last image
 		last_image = curr_image
 
 		#increment count
 		count = count + 1
 
 		#construct the next url
-		next_url = start_url + str(count) + url_end
+		next_url = start_url + str(count)
 
 		#get the number as the string
 		numString = getNum(count)
@@ -114,7 +113,7 @@ def mangaChapter(start_url):
 	bcolor.printGreen("Elapsed time: " + str(etime) +"\nFiles downloaded: " + str(count) +"\n")
 
 def getStart(manga, chapter):
-	base_url = "www.mangapanda.com"
+	base_url = "http://www.mangapanda.com"
 	manga_name = ''
 
 
@@ -128,7 +127,7 @@ def getStart(manga, chapter):
 	return base_url + '/' + manga_name + '/' + str(chapter) + '/'
 
 
-def main():
+def main(argv):
 
 	try:
 		opts, args = getopt.getopt(argv,"hs:m:c:")
@@ -167,6 +166,6 @@ def main():
 
 
 if __name__ == '__main__':
-	main()
+	main(sys.argv[1:])
 
 

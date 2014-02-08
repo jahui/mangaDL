@@ -100,7 +100,7 @@ def mangaChapter(start_url):
 
 		#get the image url we just 
 		curr_image = imageGrab(next_url, numString)
-		print next_url
+		#print next_url
 
 		if not curr_image:
 			break

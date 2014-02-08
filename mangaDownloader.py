@@ -47,9 +47,11 @@ def imageGrab(urlstring, filename):
 		bcolor.printRed("No image to download.\n")
 		return ""
 
-	if images[0][5:-1] == "http://m.mhcdn.net/media/images/404_img.jpg?v=297":
-		bcolor.printRed("Reached the end of the chapter.\n")
-		return ""
+
+	#404 for mangahere.com
+	#if images[0][5:-1] == "http://m.mhcdn.net/media/images/404_img.jpg?v=297":
+		#bcolor.printRed("Reached the end of the chapter.\n")
+		#return ""
 
 
 	#remove src=" and the trailing " part of the string
@@ -75,6 +77,7 @@ def mangaChapter(start_url):
 
 	
 	curr_image = imageGrab(start_url, "01")
+	last_image = ''
 
 	if curr_image == "":
 		count = 0
@@ -83,6 +86,9 @@ def mangaChapter(start_url):
 
 	#always loop
 	while True:
+
+		#set last image value as the current one
+		last_image = curr_image
 
 		#increment count
 		count = count + 1
@@ -95,36 +101,53 @@ def mangaChapter(start_url):
 
 		#get the image url we just 
 		curr_image = imageGrab(next_url, numString)
-
+		print next_url
 
 		if not curr_image:
 			break
 
-		#if curr_image == last_image:
-			#break
+		if curr_image == last_image:
+			break
 
 
 	etime = time.time() - start_time
 	bcolor.printGreen("Elapsed time: " + str(etime) +"\nFiles downloaded: " + str(count) +"\n")
 
-def main(argv):
+def getStart(manga, chapter):
+	base_url = "www.mangapanda.com"
+	manga_name = ''
+
+
+	#url format dependant on manga name. mangapanda keeps everything same except spaces are -
+	if manga == "goh":
+		#short cut for god of highschool
+		manga_name = "the-god-of-highschool"
+	else:
+		manga_name = manga.replace(" ", "-")
+
+	return base_url + '/' + manga_name + '/' + str(chapter) + '/'
+
+
+def main():
 
 	try:
 		opts, args = getopt.getopt(argv,"hs:m:c:")
 	except getopt.GetoptError:
-		print 'mangaDownloader.py -s <starting_url> -m <manga> -c <chapter>'
+		print 'mangaDownloader.py -m <manga> -c <chapter>'
 		sys.exit(2)
 
 	for opt, arg in opts:
 		if opt == '-h':
 			print 'mangaDownloader.py -s <starting_url>'
 			sys.exit()
-		elif opt == "-s":
-			start_url = arg
+		#elif opt == "-s":
+			#start_url = arg
 		elif opt == "-m":
 			manga = arg
 		elif opt == "-c":
 			chapter = arg
+
+	start_url = getStart(manga, chapter)
 
 	mangaChapter(start_url)
 	
@@ -138,9 +161,12 @@ def main(argv):
 	
 	call(["tar", "-czf", manga+chapter+".tar.gz", manga+chapter])
 
+	#remove the originals
+	call(["rm", "-r", "./"+manga+chapter])
+
 
 
 if __name__ == '__main__':
-	main(sys.argv[1:])
+	main()
 
 

@@ -94,6 +94,7 @@ def mangaChapter(start_url):
 
 		#construct the next url
 		next_url = start_url + str(count)
+		print next_url
 
 		#get the number as the string
 		numString = getNum(count)
@@ -121,8 +122,10 @@ def getStart(manga, chapter):
 	if manga == "goh":
 		#short cut for god of highschool
 		manga_name = "the-god-of-highschool"
+	elif manga == "breaker":
+		manga_name = "the-breaker-new-waves"
 	else:
-		manga_name = manga.replace(" ", "-")
+		manga_name = manga
 
 	return base_url + '/' + manga_name + '/' + str(chapter) + '/'
 
@@ -147,6 +150,8 @@ def main(argv):
 			chapter = arg
 
 	start_url = getStart(manga, chapter)
+
+	print "start url: " + start_url
 
 	mangaChapter(start_url)
 	

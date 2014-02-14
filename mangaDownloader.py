@@ -94,7 +94,7 @@ def mangaChapter(start_url):
 
 		#construct the next url
 		next_url = start_url + str(count)
-		print next_url
+		#print next_url
 
 		#get the number as the string
 		numString = getNum(count)
@@ -151,7 +151,7 @@ def main(argv):
 
 	start_url = getStart(manga, chapter)
 
-	print "start url: " + start_url
+	#print "start url: " + start_url
 
 	mangaChapter(start_url)
 	

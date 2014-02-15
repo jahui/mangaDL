@@ -16,9 +16,10 @@ def imageURLFilter(source, target):
     for s in source:
         if target in s:
             if "src" in s:
+            	#bcolor.printBlue(s)
             	list.append(s)
-    return list
 
+    return list
 
 def getNum(num):
 
@@ -26,6 +27,19 @@ def getNum(num):
 		return "0"+str(num)
 
 	return str(num)
+
+def urlFormat(source):
+
+	if source.endswith(";"):
+		source = source[:-1]
+
+	if source.startswith("src"):
+		source = source[5:-1]
+
+	#if source.startswith("http://"):
+	#	source = source[7:]
+
+	return source
 
 
 def imageGrab(urlstring, filename):
@@ -40,13 +54,22 @@ def imageGrab(urlstring, filename):
 	response.close()
 
 	#get a list of src urls for images with .jpg extension
+	#print "List of src elements found on page."
+	#for i in images:
+	#	print i
+
 	images = imageURLFilter(html.split(), ".jpg")
+
+
+
+	#bcolor.printBlue("image urls retrieved")
+	#for i in images:
+	#	bcolor.printBlue(i)
 
 	#no images found
 	if not images:
 		bcolor.printRed("No image to download.\n")
 		return ""
-
 
 	#404 for mangahere.com
 	#if images[0][5:-1] == "http://m.mhcdn.net/media/images/404_img.jpg?v=297":
@@ -56,14 +79,19 @@ def imageGrab(urlstring, filename):
 
 	#remove src=" and the trailing " part of the string
 	#use as url and save to file named base.jpg
-	urllib.urlretrieve(images[0][5:-1], filename + ".jpg")
+	im = urlFormat(images[0])
 
-	return images[0][5:-1]
+	#bcolor.printBlue("Trying to grab image from: " + im)
+	urllib.urlretrieve(im, filename + ".jpg")
+
+	return im
 
 def mangaChapter(start_url):
 	#given the starting url, gets all the pages
 
 	start_time = time.time()
+
+	print start_url
 
 	#mangahere note first page of every chapter is page/ with the nth page being page/n.html
 	#mangapanda note first page of every chapter is page/ with the nth page being page/n
@@ -155,18 +183,18 @@ def main(argv):
 
 	mangaChapter(start_url)
 	
-	os.mkdir(manga+chapter)
+	os.mkdir(chapter)
 	
 	#for each file ending in .jpg in the current directory move it to the appropriate directory
 	for entry in os.listdir('.'):
 		if entry.endswith(".jpg"):
-			os.rename("./"+entry, "./"+manga+chapter+"/"+entry)
+			os.rename("./"+entry, "./"+chapter+"/"+entry)
 
 	
-	call(["tar", "-czf", manga+chapter+".tar.gz", manga+chapter])
+	call(["tar", "-czf", manga+chapter+".tar.gz", chapter])
 
 	#remove the originals
-	call(["rm", "-r", "./"+manga+chapter])
+	call(["rm", "-r", "./"+chapter])
 
 
 

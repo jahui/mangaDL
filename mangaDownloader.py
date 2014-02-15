@@ -53,10 +53,6 @@ def imageGrab(urlstring, filename):
 	#close file handle
 	response.close()
 
-	#get a list of src urls for images with .jpg extension
-	#print "List of src elements found on page."
-	#for i in images:
-	#	print i
 
 	images = imageURLFilter(html.split(), ".jpg")
 
@@ -91,7 +87,7 @@ def mangaChapter(start_url):
 
 	start_time = time.time()
 
-	print start_url
+	bcolor.printBlue(start_url)
 
 	#mangahere note first page of every chapter is page/ with the nth page being page/n.html
 	#mangapanda note first page of every chapter is page/ with the nth page being page/n
@@ -149,7 +145,7 @@ def getStart(manga, chapter):
 	#url format dependant on manga name. mangapanda keeps everything same except spaces are -
 	if manga == "goh":
 		#short cut for god of highschool
-		manga_name = "the-god-of-highschool"
+		manga_name = "the-god-of-high-school"
 	elif manga == "breaker":
 		manga_name = "the-breaker-new-waves"
 	else:
